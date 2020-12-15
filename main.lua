@@ -7,6 +7,7 @@ lander.y = 0
 lander.angle = -90
 lander.vx = 0
 lander.vy = 0
+lander.speed = 3
 lander.img = love.graphics.newImage("images/ship.png")
 lander.imgEngine = love.graphics.newImage("images/engine.png")
 lander.engineOn = false
@@ -20,7 +21,7 @@ function love.load()
 end
 
 function love.update(dt)
-    lander.vy = lander.vy + (0.6 * dt)
+    lander.vy = lander.vy + (0.6 * dt)    
 
     if love.keyboard.isDown("right") then
         lander.angle = lander.angle + 90 * dt
@@ -30,6 +31,13 @@ function love.update(dt)
     end
     if love.keyboard.isDown("up") then
         engineOn = true
+
+        -- obtenir vx et vy en fonction de l'angle
+        local angleRadian = math.rad(lander.angle)
+        local forceX = math.cos(angleRadian) * (lander.speed * dt)
+        local forceY = math.sin(angleRadian) * (lander.speed * dt)
+        lander.vx = lander.vx + forceX
+        lander.vy = lander.vy + forceY
     else
         engineOn = false
     end
@@ -43,4 +51,5 @@ function love.draw()
     if engineOn then
         love.graphics.draw(lander.imgEngine, lander.x, lander.y, math.rad(lander.angle), 1, 1, lander.imgEngine:getWidth()/2, lander.imgEngine:getHeight()/2)
     end
+
 end
